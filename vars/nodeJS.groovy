@@ -10,13 +10,13 @@ def call (Map configMap) {
         Course = 'Jenkins'
         appVersion = ""
         ACC_ID = "634758830486"
-        PROJECT = "roboshop"
-        COMPONENT = "catalogue"
+        PROJECT = configMap.get('project')
+        COMPONENT = configMap.get('component')
 
     }
 
     options {
-        timeout(time: 40, unit: 'MINUTES') 
+        timeout(time: 60, unit: 'MINUTES') 
         disableConcurrentBuilds()
     }
 
@@ -40,7 +40,9 @@ def call (Map configMap) {
                     """
                 }
             }
-        }       
+        }
+
+
 
         stage('Build Image ECR') {
             steps {
@@ -57,6 +59,7 @@ def call (Map configMap) {
             }
         }
     
+
 
     }
 
@@ -75,5 +78,4 @@ def call (Map configMap) {
             echo 'Pipeline is aborted'
         }
     }
-}
 }
