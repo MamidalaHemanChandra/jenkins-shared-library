@@ -51,6 +51,21 @@ def call(Map configMap) {
                     }
                 }
             }
+
+            stage('Catalogue Deploy Trigger Downstream Job') {
+                steps {
+                    script {
+                        echo "Catalogue Deploy Triggering downstream job"
+                        build job: '../catalogue-deploy',
+                            wait: false,
+                            propagate: false.
+                            parameters: [
+                                string(name: 'appVersion', value: "${appVersion}"),
+                                string(name: 'deploy_to', value: 'dev')
+                            ]
+                    }
+                }
+            }
         }
 
         post {
