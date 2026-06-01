@@ -58,7 +58,7 @@ def call(Map configMap) {
                         echo "Catalogue Deploy Triggering downstream job"
                         build job: '../catalogue-deploy',
                             wait: false,
-                            propagate: false.
+                            propagate: false,
                             parameters: [
                                 string(name: 'appVersion', value: "${appVersion}"),
                                 string(name: 'deploy_to', value: 'dev')
