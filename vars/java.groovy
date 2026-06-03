@@ -34,7 +34,7 @@ def call(Map configMap) {
 
             stage('Install Dependencies') {
                 steps {
-                    sh "npm install"
+                    sh "pip3 install -r requirements.txt"
                 }
             }
 
