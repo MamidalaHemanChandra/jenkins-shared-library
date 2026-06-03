@@ -25,7 +25,7 @@ def call(Map configMap) {
             stage('Read App Version') {
                 steps {
                     script {
-                        def pom = readMavenPom(file: 'pom.xml').version
+                        def pom = readMavenPom file: 'pom.xml'
                         appVersion = pom.version
                         echo "App Version is: ${appVersion}"
                     }
@@ -34,7 +34,7 @@ def call(Map configMap) {
 
             stage('Install Dependencies') {
                 steps {
-                    sh "mvn clean package"
+                    sh "npm install"
                 }
             }
 
@@ -43,11 +43,8 @@ def call(Map configMap) {
                     script {
                         withAWS(region: 'us-east-1', credentials: 'aws-creds') {
                             sh """
-                            aws ecr get-login-password --region us-east-1 | \
-                            docker login --username AWS --password-stdin ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com
-
+                            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com
                             docker build -t ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com/${PROJECT}/${COMPONENT}:${appVersion} .
-
                             docker push ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com/${PROJECT}/${COMPONENT}:${appVersion}
                             """
                         }
