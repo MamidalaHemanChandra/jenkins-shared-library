@@ -25,8 +25,8 @@ def call(Map configMap) {
             stage('Read App Version') {
                 steps {
                     script {
-                        def packageJSON = readJSON file: 'package.json'
-                        appVersion = packageJSON.version
+                        def pom = readMavenPom file: 'pom.xml'
+                        appVersion = pom.version
                         echo "App Version is: ${appVersion}"
                     }
                 }
@@ -34,7 +34,7 @@ def call(Map configMap) {
 
             stage('Install Dependencies') {
                 steps {
-                    sh "npm install"
+                    sh "mvn clean package"
                 }
             }
 
